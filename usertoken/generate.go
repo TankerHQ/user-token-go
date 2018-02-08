@@ -11,25 +11,26 @@ import (
 )
 
 const (
-	blockHashSize  = 32
-	userSecretSize = 32
+	blockHashSize      = 32
+	checkHashBlockSize = 16
+	userSecretSize     = 32
 )
 
 //Config : trustchain cofiguration
 type Config struct {
-	trustchainID         string
-	trustchainPrivateKey string
+	TrustchainID         string
+	TrustchainPrivateKey string
 }
 
 //Generate a user token for given user.
 func Generate(config Config, userID string) (string, error) {
-	truschainIDBytes, err := base64.StdEncoding.DecodeString(config.trustchainID)
+	truschainIDBytes, err := base64.StdEncoding.DecodeString(config.TrustchainID)
 	if err != nil {
-		return "", errors.New("Wrong trustchainID format, should be base64: " + config.trustchainID)
+		return "", errors.New("Wrong trustchainID format, should be base64: " + config.TrustchainID)
 	}
-	trustchainPrivKeyBytes, err := base64.StdEncoding.DecodeString(config.trustchainPrivateKey)
+	trustchainPrivKeyBytes, err := base64.StdEncoding.DecodeString(config.TrustchainPrivateKey)
 	if err != nil {
-		return "", errors.New("Wrong trustchainPrivateKey format, should be base64: " + config.trustchainPrivateKey)
+		return "", errors.New("Wrong trustchainPrivateKey format, should be base64: " + config.TrustchainPrivateKey)
 	}
 	return generateToken(truschainIDBytes, trustchainPrivKeyBytes, userID)
 }
@@ -58,11 +59,12 @@ func generateToken(trustchainID []byte, trustchainPrivateKey []byte,
 	}
 
 	rand := randombytes.RandomBytes(userSecretSize - 1)
-	hashedStuff, err := generichash.CryptoGenericHash(blockHashSize, append(rand, userID...), nil)
+	hashedStuff, err := generichash.CryptoGenericHash(checkHashBlockSize, append(rand, userID...), nil)
 	if err != 0 {
 		return "", errors.New("Could not hash" + string(err))
 	}
-	userSecret := append(rand, hashedStuff...)
+	userSecret := rand
+	userSecret = append(userSecret, hashedStuff[0])
 
 	delegationToken := delegationToken{
 		EphemeralPrivateSignatureKey: eprivSignKey,
