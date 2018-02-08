@@ -1,1 +1,3 @@
-# Tanker-go
+# usertoken
+
+Please see https://tanker.io/docs/spec/user-token/ for usage
