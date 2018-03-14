@@ -41,10 +41,10 @@ var _ = Describe("Generate", func() {
 		Expect(err2).NotTo(HaveOccurred())
 
 		type delegationToken struct {
+			DelegationSignature          []byte `json:"delegation_signature"`
 			EphemeralPublicSignatureKey  []byte `json:"ephemeral_public_signature_key"`
 			EphemeralPrivateSignatureKey []byte `json:"ephemeral_private_signature_key"`
 			UserID                       []byte `json:"user_id"`
-			DelegationSignature          []byte `json:"delegation_signature"`
 			UserSecret                   []byte `json:"user_secret"`
 		}
 
@@ -58,17 +58,13 @@ var _ = Describe("Generate", func() {
 		// check valid control byte in user secret
 		Expect(len(token.UserID)).To(Equal(32))
 		Expect(len(token.UserSecret)).To(Equal(32))
-		payload := []byte{}
-		payload = append(payload, token.UserSecret[:31]...)
-		payload = append(payload, token.UserID...)
+		payload := append(token.UserSecret[:31], token.UserID...)
 		control, code := generichash.CryptoGenericHash(16, payload, nil)
 		Expect(code).To(Equal(0)) // means no error
 		Expect(token.UserSecret[31]).To(Equal(control[0]))
 
 		// check with valid signature
-		payload = []byte{}
-		payload = append(payload, token.EphemeralPublicSignatureKey...)
-		payload = append(payload, token.UserID...)
+		payload = append(token.EphemeralPublicSignatureKey, token.UserID...)
 		signKey, _ := base64.StdEncoding.DecodeString(trustchainPublicKey)
 		Expect(cryptosign.CryptoSignVerifyDetached(token.DelegationSignature, payload, signKey)).To(Equal(0))
 
