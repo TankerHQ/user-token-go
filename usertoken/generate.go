@@ -35,7 +35,8 @@ func Generate(config Config, userID string) (string, error) {
 	return generateToken(truschainIDBytes, trustchainPrivKeyBytes, userID)
 }
 
-type delegationToken struct {
+//Exported only to facilitate code testing (this shouldn't be needed in any app using this lib)
+type DelegationToken struct {
 	DelegationSignature          []byte `json:"delegation_signature"`
 	EphemeralPublicSignatureKey  []byte `json:"ephemeral_public_signature_key"`
 	EphemeralPrivateSignatureKey []byte `json:"ephemeral_private_signature_key"`
@@ -64,7 +65,7 @@ func generateToken(trustchainID []byte, trustchainPrivateKey []byte,
 		return "", err3
 	}
 
-	delegationToken := delegationToken{
+	delegationToken := DelegationToken{
 		DelegationSignature:          delegationSignature,
 		EphemeralPrivateSignatureKey: eprivSignKey,
 		EphemeralPublicSignatureKey:  epubSignKey,

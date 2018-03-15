@@ -40,18 +40,10 @@ var _ = Describe("Generate", func() {
 		jsonToken, err2 := base64.StdEncoding.DecodeString(b64Token)
 		Expect(err2).NotTo(HaveOccurred())
 
-		type delegationToken struct {
-			DelegationSignature          []byte `json:"delegation_signature"`
-			EphemeralPublicSignatureKey  []byte `json:"ephemeral_public_signature_key"`
-			EphemeralPrivateSignatureKey []byte `json:"ephemeral_private_signature_key"`
-			UserID                       []byte `json:"user_id"`
-			UserSecret                   []byte `json:"user_secret"`
-		}
-
-		var token delegationToken
+		var token usertoken.DelegationToken
 
 		// Note: base64-encoded strings values are automatically decoded as []byte
-		//       thanks to the []byte typing in the delegationToken struct
+		//       thanks to the []byte typing in the DelegationToken struct
 		err3 := json.Unmarshal(jsonToken, &token)
 		Expect(err3).NotTo(HaveOccurred())
 
