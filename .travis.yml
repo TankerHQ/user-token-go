@@ -8,4 +8,4 @@ go:
 
 install: ./ci/install.sh
 
-sudo: true
+sudo: required
