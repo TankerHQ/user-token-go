@@ -7,7 +7,8 @@ echo "Installing libsodium"
     wget -q https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSION/libsodium-$LIBSODIUM_VERSION.tar.gz
     tar -xzf libsodium-$LIBSODIUM_VERSION.tar.gz
     cd libsodium-$LIBSODIUM_VERSION/
-    ./configure
+    # env CC=tcc CFLAGS='-w' ./configure --prefix=/tmp --disable-dependency-tracking --disable-shared || cat config.log
+    ./configure --prefix=/tmp --disable-dependency-tracking --disable-shared || cat config.log
     make
     make install
     ldconfig
