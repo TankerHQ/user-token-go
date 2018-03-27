@@ -1,4 +1,4 @@
-# User token 
+# User token [![Travis][build-badge]][build]
 
 User token generation in Go for the [Tanker SDK](https://tanker.io/docs/latest).
 
@@ -65,3 +65,6 @@ go test ./... -test.v
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/SuperTanker/user-token-go.
+
+[build-badge]: https://travis-ci.org/SuperTanker/user-token-go.svg?branch=master
+[build]: https://travis-ci.org/SuperTanker/user-token-go
