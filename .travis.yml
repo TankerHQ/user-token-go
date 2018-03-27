@@ -1,3 +1,5 @@
+sudo: required
+
 language: go
 
 go:
@@ -6,6 +8,8 @@ go:
   - "1.10.x"
   # - "1.x"
 
-install: ./ci/install.sh
+install:
+  - ./ci/install.sh
 
-sudo: required
+script:
+  - go test -v ./...
