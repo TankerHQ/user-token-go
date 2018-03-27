@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -x
 
 LIBSODIUM_VERSION="1.0.16"
 LIBSODIUM_GO_SHA1="692ddacd45e46b2c7512890f032b39d019a5464b"
@@ -10,7 +11,7 @@ wget -q https://github.com/jedisct1/libsodium/releases/download/$LIBSODIUM_VERSI
 tar -xzf libsodium-$LIBSODIUM_VERSION.tar.gz
 (
     cd libsodium-$LIBSODIUM_VERSION/
-    ./configure
+    ./configure --disable-shared
     make -j $(nproc)
     sudo make install
 )
@@ -27,5 +28,3 @@ echo "Build libsodium-go dependency"
   ./build.sh
   go install -v ./...
 )
-
-go test -v ./...
