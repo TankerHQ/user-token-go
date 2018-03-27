@@ -6,7 +6,6 @@ go:
   - "1.10.x"
   # - "1.x"
 
-install: ./.travis_install.sh
+install: ./ci/install.sh
 
-env:
-  - LIBSODIUM_VERSION="1.0.16"
+sudo: true
