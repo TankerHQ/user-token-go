@@ -1,7 +1,12 @@
 language: go
 
 go:
-  - "1.8.x"
-  - "1.9.x"
+  # - "1.8.x"
+  # - "1.9.x"
   - "1.10.x"
-  - "1.x"
+  # - "1.x"
+
+install: ./.travis-install.sh
+
+env:
+  - LIBSODIUM_VERSION="1.0.16"
