@@ -11,6 +11,8 @@ echo "Installing libsodium"
     make
     make install
     ldconfig
+    cd -
+    rm -rf libsodium-$LIBSODIUM_VERSION*
 )
 
 echo "Install go dependencies"
