@@ -8,6 +8,10 @@ User token generation in Go for the [Tanker SDK](https://tanker.io/docs/latest).
 go get github.com/SuperTanker/user-token-go/usertoken
 ```
 
+This library depends on [libsodium](https://download.libsodium.org/doc/) and [libsodium-go](https://github.com/GoKillers/libsodium-go).
+
+As a setup example, you can check the [ci/install.sh](https://github.com/SuperTanker/user-token-go/blob/master/ci/install.sh) script we use to run tests in Travis.
+
 ## Usage
 
 The server-side code below demonstrates a typical flow to safely deliver user tokens to your users:
