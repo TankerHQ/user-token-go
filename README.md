@@ -5,12 +5,12 @@ User token generation in Go for the [Tanker SDK](https://tanker.io/docs/latest).
 ## Installation
 
 ```bash
-go get github.com/SuperTanker/user-token-go/usertoken
+go get github.com/TankerHQ/user-token-go/usertoken
 ```
 
 This library depends on [libsodium](https://download.libsodium.org/doc/) and [libsodium-go](https://github.com/GoKillers/libsodium-go).
 
-As a setup example, you can check the [ci/install.sh](https://github.com/SuperTanker/user-token-go/blob/master/ci/install.sh) script we use to run tests in Travis.
+As a setup example, you can check the [ci/install.sh](https://github.com/TankerHQ/user-token-go/blob/master/ci/install.sh) script we use to run tests in Travis.
 
 ## Usage
 
@@ -18,7 +18,7 @@ The server-side code below demonstrates a typical flow to safely deliver user to
 
 ```go
 import (
-    "github.com/SuperTanker/user-token-go/usertoken"
+    "github.com/TankerHQ/user-token-go/usertoken"
 )
 
 config := usertoken.Config {
@@ -68,7 +68,7 @@ go test ./... -test.v
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/SuperTanker/user-token-go.
+Bug reports and pull requests are welcome on GitHub at https://github.com/TankerHQ/user-token-go.
 
-[build-badge]: https://travis-ci.org/SuperTanker/user-token-go.svg?branch=master
-[build]: https://travis-ci.org/SuperTanker/user-token-go
+[build-badge]: https://travis-ci.org/TankerHQ/user-token-go.svg?branch=master
+[build]: https://travis-ci.org/TankerHQ/user-token-go
