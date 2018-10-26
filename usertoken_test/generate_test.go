@@ -8,7 +8,7 @@ import (
 	generichash "github.com/GoKillers/libsodium-go/cryptogenerichash"
 	"github.com/GoKillers/libsodium-go/cryptosign"
 	"github.com/GoKillers/libsodium-go/randombytes"
-	"github.com/SuperTanker/user-token-go/usertoken"
+	"github.com/TankerHQ/user-token-go/usertoken"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
