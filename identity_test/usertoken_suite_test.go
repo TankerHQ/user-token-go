@@ -1,4 +1,4 @@
-package usertoken_test
+package identity_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestUserToken(t *testing.T) {
+func TestIdentity(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "UserToken Suite")
+	RunSpecs(t, "Identity Suite")
 }

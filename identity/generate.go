@@ -1,4 +1,4 @@
-package usertoken
+package identity
 
 import (
 	"encoding/base64"

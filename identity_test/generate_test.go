@@ -1,4 +1,4 @@
-package usertoken_test
+package identity_test
 
 import (
 	"encoding/base64"
@@ -8,7 +8,7 @@ import (
 	generichash "github.com/GoKillers/libsodium-go/cryptogenerichash"
 	"github.com/GoKillers/libsodium-go/cryptosign"
 	"github.com/GoKillers/libsodium-go/randombytes"
-	"github.com/TankerHQ/user-token-go/usertoken"
+	"github.com/TankerHQ/identity-go/identity"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -27,20 +27,20 @@ var _ = Describe("Hash", func() {
 
 var _ = Describe("Generate", func() {
 	It("returns a valid token signed with the trustchain private key", func() {
-		config := usertoken.Config{
+		config := identity.Config{
 			TrustchainID:         "AzES0aJwDCej9bQVY9AUMZBCLdX0msEc/TJ4DOhZaQs=",
 			TrustchainPrivateKey: "cBAq6A00rRNVTHicxNHdDFuq6LNUo6gAz58oKqy9CGd054sGkfPYgXftRCRLfqxeiaoRwQCNLIKxdnuKuf1RAA==",
 		}
 		trustchainPublicKey := "dOeLBpHz2IF37UQkS36sXomqEcEAjSyCsXZ7irn9UQA="
 		userIDString := "user@tanker.io"
 
-		b64Token, err := usertoken.Generate(config, userIDString)
+		b64Token, err := identity.Generate(config, userIDString)
 		Expect(err).NotTo(HaveOccurred())
 
 		jsonToken, err2 := base64.StdEncoding.DecodeString(b64Token)
 		Expect(err2).NotTo(HaveOccurred())
 
-		var token usertoken.DelegationToken
+		var token identity.DelegationToken
 
 		// Note: base64-encoded strings values are automatically decoded as []byte
 		//       thanks to the []byte typing in the DelegationToken struct
