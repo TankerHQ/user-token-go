@@ -79,8 +79,8 @@ type PublicIdentity struct {
 	Value        []byte `json:"value"`
 }
 
-//Generate a user token for given user.
-func Generate(config Config, userID string) (string, error) {
+//Create a user token for given user.
+func Create(config Config, userID string) (string, error) {
 	truschainIDBytes, err := base64.StdEncoding.DecodeString(config.TrustchainID)
 	if err != nil {
 		return "", errors.New("Wrong trustchainID format, should be base64: " + config.TrustchainID)
@@ -142,9 +142,9 @@ func generateToken(trustchainID []byte, trustchainPrivateKey []byte,
 		TrustchainID:                 trustchainID,
 	}
 
-	b64Token, err4 := toB64JSON(identity)
-	if err4 != nil {
-		return "", err4
+	b64Token, err := toB64JSON(identity)
+	if err != nil {
+		return "", err
 	}
 	return b64Token, nil
 }

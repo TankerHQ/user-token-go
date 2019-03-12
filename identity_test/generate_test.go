@@ -65,7 +65,7 @@ var _ = Describe("Generate", func() {
 	)
 
 	It("returns a tanker identity", func() {
-		b64Identity, err := identity.Generate(trustchainConfig, userID)
+		b64Identity, err := identity.Create(trustchainConfig, userID)
 		Expect(err).To(Not(HaveOccurred()))
 
 		sidentity, err := base64.StdEncoding.DecodeString(b64Identity)
@@ -81,7 +81,7 @@ var _ = Describe("Generate", func() {
 	})
 
 	It("returns a tanker public identity from an tanker indentity", func() {
-		id, err := identity.Generate(trustchainConfig, userID)
+		id, err := identity.Create(trustchainConfig, userID)
 		Expect(err).To(Not(HaveOccurred()))
 		b64Identity, err := identity.GetPublicIdentity(id)
 		Expect(err).To(Not(HaveOccurred()))
