@@ -38,6 +38,47 @@ func genericHash(input []byte) []byte {
 	return hash.Sum([]byte{})
 }
 
+func toB64JSON(v interface{}) (string, error) {
+	// Note: []byte values are encoded as base64-encoded strings
+	//       (see: https://golang.org/pkg/encoding/json/#Marshal)
+	jsonToken, err := json.Marshal(v)
+	if err != nil {
+		return "", err
+	}
+
+	b64Token := base64.StdEncoding.EncodeToString(jsonToken)
+	return b64Token, nil
+}
+
+func fromB64JSON(b64 string, v interface{}) error {
+	str, err := base64.StdEncoding.DecodeString(b64)
+	if err != nil {
+		return err
+	}
+	err = json.Unmarshal(str, v)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//Exported only to facilitate code testing (this shouldn't be needed in any app using this lib)
+type Identity struct {
+	DelegationSignature          []byte `json:"delegation_signature"`
+	EphemeralPublicSignatureKey  []byte `json:"ephemeral_public_signature_key"`
+	EphemeralPrivateSignatureKey []byte `json:"ephemeral_private_signature_key"`
+	Target                       string `json:"target"`
+	Value                        []byte `json:"value"`
+	UserSecret                   []byte `json:"user_secret"`
+	TrustchainID                 []byte `json:"trustchain_id"`
+}
+
+type PublicIdentity struct {
+	TrustchainID []byte `json:"trustchain_id"`
+	Target       string `json:"target"`
+	Value        []byte `json:"value"`
+}
+
 //Generate a user token for given user.
 func Generate(config Config, userID string) (string, error) {
 	truschainIDBytes, err := base64.StdEncoding.DecodeString(config.TrustchainID)
@@ -51,13 +92,29 @@ func Generate(config Config, userID string) (string, error) {
 	return generateToken(truschainIDBytes, trustchainPrivKeyBytes, userID)
 }
 
-//Exported only to facilitate code testing (this shouldn't be needed in any app using this lib)
-type DelegationToken struct {
-	DelegationSignature          []byte `json:"delegation_signature"`
-	EphemeralPublicSignatureKey  []byte `json:"ephemeral_public_signature_key"`
-	EphemeralPrivateSignatureKey []byte `json:"ephemeral_private_signature_key"`
-	UserID                       []byte `json:"user_id"`
-	UserSecret                   []byte `json:"user_secret"`
+func GetPublicIdentity(b64Identity string) (string, error) {
+	identity := Identity{}
+	err := fromB64JSON(b64Identity, &identity)
+	if err != nil {
+		return "", err
+	}
+
+	if identity.Target != "user" {
+		return "", errors.New("unsupported identity target")
+	}
+
+	publicIdentity := PublicIdentity{
+		TrustchainID: identity.TrustchainID,
+		Target:       "user",
+		Value:        identity.Value,
+	}
+
+	b64PublicIdentity, err := toB64JSON(publicIdentity)
+	if err != nil {
+		return "", err
+	}
+
+	return b64PublicIdentity, nil
 }
 
 func generateToken(trustchainID []byte, trustchainPrivateKey []byte,
@@ -75,22 +132,20 @@ func generateToken(trustchainID []byte, trustchainPrivateKey []byte,
 
 	delegationSignature := ed25519.Sign(trustchainPrivateKey, payload)
 
-	delegationToken := DelegationToken{
+	identity := Identity{
 		DelegationSignature:          delegationSignature,
 		EphemeralPrivateSignatureKey: eprivSignKey,
 		EphemeralPublicSignatureKey:  epubSignKey,
-		UserID:                       userID,
+		Target:                       "user",
+		Value:                        userID,
 		UserSecret:                   userSecret,
+		TrustchainID:                 trustchainID,
 	}
 
-	// Note: []byte values are encoded as base64-encoded strings
-	//       (see: https://golang.org/pkg/encoding/json/#Marshal)
-	jsonToken, err4 := json.Marshal(delegationToken)
+	b64Token, err4 := toB64JSON(identity)
 	if err4 != nil {
 		return "", err4
 	}
-
-	b64Token := base64.StdEncoding.EncodeToString(jsonToken)
 	return b64Token, nil
 }
 
